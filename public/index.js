@@ -46,7 +46,7 @@ function renderPage(page) {
 
         const h3 = document.createElement('h3');
         const a = document.createElement('a');
-        a.href = `view-post.html?id=${encodeURIComponent(post.id)}`;
+        a.href = `post.html?id=${encodeURIComponent(post.id)}`;
         // textContent를 사용해 제목에 악성 스크립트가 포함되어 있어도
         // 그대로 실행되지 않고 문자열로만 표시되도록 처리 (XSS 방지)
         a.textContent = post.title;
