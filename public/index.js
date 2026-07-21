@@ -117,7 +117,7 @@ writeBtn.addEventListener('click', () => {
     if (!currentUser && !currentAdmin) {
         showToast('로그인이 필요합니다');
     } else {
-        window.location.href = 'post.html';
+        window.location.href = 'write.html';
     }
 });
 
