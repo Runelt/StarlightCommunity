@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성하기</title>
+    <link rel="stylesheet" href="alert.css">
+    <style>
+        :root {
+            --bg: #f5f6fb;
+            --surface: #ffffff;
+            --ink: #1c1f2b;
+            --ink-soft: #6b7280;
+            --line: #e8e9f0;
+            --accent: #4f46e5;
+            --accent-soft: #eef0fd;
+            --accent-hover: #4338ca;
+            --radius: 14px;
+            --shadow: 0 1px 2px rgba(20, 20, 43, 0.04), 0 8px 24px rgba(20, 20, 43, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 20px 60px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin: 0 0 24px 0;
+        }
+
+        form {
+            width: 100%;
+            max-width: 560px;
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+        }
+
+        label.field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink-soft);
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--ink);
+            background-color: #fafafa;
+            resize: vertical;
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: #fff;
+        }
+
+        textarea {
+            min-height: 160px;
+        }
+
+        .file-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .custom-file-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 220px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 10px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: background-color 0.15s ease;
+        }
+
+        .custom-file-label:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .custom-file-label:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .file-hint {
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+
+        button[type="submit"] {
+            flex: 1;
+            background-color: var(--accent);
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--accent-hover);
+        }
+
+        #cancelBtn {
+            flex: 1;
+            background-color: var(--surface);
+            color: var(--ink-soft);
+            border: 1px solid var(--line);
+        }
+
+        #cancelBtn:hover {
+            background-color: var(--accent-soft);
+            color: var(--accent-hover);
+        }
+
+        button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>게시글 작성하기</h1>
+    <form id="writeForm" enctype="multipart/form-data">
+        <label class="field-label" for="title-input">제목</label>
+        <input type="text" name="title" id="title-input" placeholder="제목을 입력하세요" required>
+
+        <label class="field-label" for="content-input">내용</label>
+        <textarea name="content" id="content-input" placeholder="내용을 입력하세요" required></textarea>
+
+        <!--
+            작성자 값은 클라이언트 입력을 그대로 전송합니다.
+            숨겨진 필드라도 브라우저 개발자 도구로 값 조작이 가능하므로,
+            서버는 이 값을 신뢰하지 말고 로그인 세션(토큰)을 기준으로
+            실제 작성자를 판별해야 합니다.
+        -->
+        <input type="hidden" name="author" id="write-author-input" value="">
+
+        <div class="file-row">
+            <label for="fileInput" class="custom-file-label">파일 선택</label>
+            <span class="file-hint" id="fileHint">동영상 파일 (선택)</span>
+            <input type="file" name="video" accept="video/*" id="fileInput" style="display: none;">
+        </div>
+
+        <div class="actions">
+            <button type="submit">게시하기</button>
+            <button type="button" id="cancelBtn">취소하기</button>
+        </div>
+    </form>
+    <script type="module" src="write.js"></script>
+    <script src="alert.js"></script>
+    <div id="custom-toast-container"></div>
+</body>
+
+</html>

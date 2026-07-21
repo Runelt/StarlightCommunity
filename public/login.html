@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="stylesheet" href="alert.css">
+    <style>
+        :root {
+            --bg: #f5f6fb;
+            --surface: #ffffff;
+            --ink: #1c1f2b;
+            --ink-soft: #6b7280;
+            --line: #e8e9f0;
+            --accent: #4f46e5;
+            --accent-soft: #eef0fd;
+            --accent-hover: #4338ca;
+            --radius: 14px;
+            --shadow: 0 1px 2px rgba(20, 20, 43, 0.04), 0 8px 24px rgba(20, 20, 43, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 20px 60px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--ink);
+            margin-bottom: 28px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        /* 탭 */
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .tab-btn {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--ink-soft);
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--ink);
+            background-color: var(--accent-soft);
+        }
+
+        .tab-btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
+        }
+
+        /* 탭 내용 */
+        .tab-content {
+            padding: 24px;
+        }
+
+        /* 입력 필드 */
+        .input-field {
+            width: 100%;
+            padding: 12px 14px;
+            margin: 6px 0;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            background-color: #fafafa;
+            color: var(--ink);
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: #fff;
+        }
+
+        /* 버튼 */
+        .btn {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 4px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--accent);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .signup {
+            color: var(--ink-soft);
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .signup:hover {
+            color: var(--accent);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a class="page-title" href="index.html">게시판</a>
+
+    <div class="card">
+        <div class="tab-container" role="tablist">
+            <button type="button" class="tab-btn" data-tab="home" role="tab">홈</button>
+            <button type="button" class="tab-btn active" data-tab="login" role="tab" aria-selected="true">로그인</button>
+            <button type="button" class="tab-btn" data-tab="admin" role="tab" aria-selected="false">관리자</button>
+        </div>
+
+        <div class="tab-content" id="login-tab" role="tabpanel">
+            <input type="text" id="username" class="input-field" placeholder="아이디" autocomplete="username" required />
+            <input type="password" id="password" class="input-field" placeholder="비밀번호" autocomplete="current-password" required />
+            <button type="button" class="btn" id="login-btn">로그인</button>
+            <p class="signup" id="signup">회원가입</p>
+        </div>
+
+        <div class="tab-content" id="admin-tab" role="tabpanel" style="display:none;">
+            <input type="text" id="admin-username" class="input-field" placeholder="관리자 아이디" autocomplete="username" required />
+            <input type="password" id="admin-password" class="input-field" placeholder="관리자 비밀번호" autocomplete="current-password" required />
+            <button type="button" class="btn" id="admin-login-btn">관리자 로그인</button>
+        </div>
+    </div>
+
+    <div id="custom-toast-container"></div>
+    <script type="module" src="login.js"></script>
+    <script src="alert.js"></script>
+
+</body>
+
+</html>

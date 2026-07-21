@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 보기</title>
+    <link rel="stylesheet" href="alert.css">
+    <style>
+        :root {
+            --bg: #f5f6fb;
+            --surface: #ffffff;
+            --ink: #1c1f2b;
+            --ink-soft: #6b7280;
+            --line: #e8e9f0;
+            --accent: #4f46e5;
+            --accent-soft: #eef0fd;
+            --accent-hover: #4338ca;
+            --danger: #e5484d;
+            --danger-hover: #c9373c;
+            --radius: 14px;
+            --shadow: 0 1px 2px rgba(20, 20, 43, 0.04), 0 8px 24px rgba(20, 20, 43, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            margin: 0;
+            padding: 32px 20px 60px;
+        }
+
+        #post-container,
+        #comments-area {
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            max-width: 720px;
+            margin: 0 auto 20px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        #post-meta {
+            font-size: 13px;
+            color: var(--ink-soft);
+            margin: 0 0 8px 0;
+        }
+
+        #post-title {
+            margin: 0 0 12px 0;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        #post-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--ink);
+            white-space: pre-wrap;
+        }
+
+        #post-video,
+        #post-image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 12px;
+            display: block;
+        }
+
+        #post-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        button {
+            font-family: inherit;
+            padding: 10px 16px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.15s ease;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        button:disabled {
+            background-color: var(--line);
+            color: var(--ink-soft);
+            cursor: default;
+        }
+
+        #backBtn {
+            background-color: var(--surface);
+            color: var(--ink-soft);
+            border: 1px solid var(--line);
+        }
+
+        #backBtn:hover {
+            background-color: var(--accent-soft);
+            color: var(--accent-hover);
+        }
+
+        #deleteBtn {
+            background-color: var(--danger);
+        }
+
+        #deleteBtn:hover {
+            background-color: var(--danger-hover);
+        }
+
+        #comments-list {
+            margin-bottom: 16px;
+        }
+
+        #comments-list p {
+            color: var(--ink-soft);
+            font-size: 14px;
+        }
+
+        .comment {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .comment:last-child {
+            border-bottom: none;
+        }
+
+        .comment strong {
+            color: var(--ink);
+            margin-right: 6px;
+        }
+
+        .comment-form-wrap {
+            display: flex;
+            gap: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 50px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px 12px;
+            background-color: #fafafa;
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: #fff;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div id="post-container">
+            <p id="post-meta"></p>
+            <h2 id="post-title"></h2>
+            <p id="post-content"></p>
+            <img id="post-image" alt="첨부 이미지" style="display:none;">
+            <video id="post-video" controls style="display:none;"></video>
+            <div id="post-actions">
+                <button type="button" id="backBtn">뒤로가기</button>
+                <button type="button" id="deleteBtn" style="display:none;">삭제</button>
+            </div>
+        </div>
+
+        <div id="comments-area">
+            <!-- 댓글 섹션 -->
+            <div id="comments-list"></div>
+            <!-- 로그인한 사용자만 보이게 -->
+            <div id="comment-form-wrap" class="comment-form-wrap" style="display:none;">
+                <textarea id="comment-input" placeholder="댓글을 작성하세요" aria-label="댓글 입력"></textarea>
+                <button type="button" id="comment-submit">올리기</button>
+            </div>
+        </div>
+    </main>
+    <div id="custom-toast-container"></div>
+    <script type="module" src="post.js"></script>
+    <script src="alert.js"></script>
+</body>
+
+</html>
