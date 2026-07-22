@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const { neon } = require('@neondatabase/serverless');
 const { del } = require('@vercel/blob');
 const { handleUpload } = require('@vercel/blob/client');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,7 +16,7 @@ const sql = neon(process.env.DATABASE_URL);
 
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/blob-upload', async (req, res) => {
     try {
