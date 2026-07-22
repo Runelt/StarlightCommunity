@@ -16,7 +16,7 @@ const sql = neon(process.env.DATABASE_URL);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '2mb' }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/blob-upload', async (req, res) => {
     try {
