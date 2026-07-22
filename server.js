@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const { neon } = require('@neondatabase/serverless');
 const { del } = require('@vercel/blob');
 const { handleUpload } = require('@vercel/blob');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
