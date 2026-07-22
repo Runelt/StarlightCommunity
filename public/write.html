@@ -123,6 +123,20 @@
         .file-hint {
             font-size: 13px;
             color: var(--ink-soft);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #imagePreview,
+        #videoPreview {
+            display: block;
+            max-width: 100%;
+            max-height: 260px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            margin-bottom: 18px;
+            background-color: #000;
         }
 
         .actions {
@@ -178,26 +192,23 @@
 
 <body>
     <h1>게시글 작성하기</h1>
-    <form id="writeForm" enctype="multipart/form-data">
+    <form id="writeForm">
         <label class="field-label" for="title-input">제목</label>
         <input type="text" name="title" id="title-input" placeholder="제목을 입력하세요" required>
 
         <label class="field-label" for="content-input">내용</label>
         <textarea name="content" id="content-input" placeholder="내용을 입력하세요" required></textarea>
 
-        <!--
-            작성자 값은 클라이언트 입력을 그대로 전송합니다.
-            숨겨진 필드라도 브라우저 개발자 도구로 값 조작이 가능하므로,
-            서버는 이 값을 신뢰하지 말고 로그인 세션(토큰)을 기준으로
-            실제 작성자를 판별해야 합니다.
-        -->
         <input type="hidden" name="author" id="write-author-input" value="">
 
         <div class="file-row">
             <label for="fileInput" class="custom-file-label">파일 선택</label>
-            <span class="file-hint" id="fileHint">이미지와 동영상 선택</span>
-            <input type="file" name="video" accept="image/*, video/*" id="fileInput" style="display: none;">
+            <span class="file-hint" id="fileHint">사진 또는 동영상 선택</span>
+            <input type="file" name="media" accept="image/*,video/*" id="fileInput" style="display: none;">
         </div>
+
+        <img id="imagePreview" alt="첨부 이미지 미리보기" style="display:none;">
+        <video id="videoPreview" controls style="display:none;"></video>
 
         <div class="actions">
             <button type="submit">게시하기</button>
