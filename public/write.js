@@ -1,5 +1,5 @@
 import { showToast } from './alert.js';
-import { upload } from 'https://esm.sh/@vercel/blob@1.0.0/client';
+import { upload } from '@vercel/blob/client';
 
 const postForm = document.getElementById('writeForm');
 const cancelBtn = document.getElementById('cancelBtn');
