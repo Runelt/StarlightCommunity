@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "vercel dev"
+    "dev": "next dev"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
