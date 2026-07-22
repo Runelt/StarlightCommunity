@@ -2,7 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 const { neon } = require('@neondatabase/serverless');
 const { del } = require('@vercel/blob');
-const { handleUpload } = require('@vercel/blob');
+const { handleUpload } = require('@vercel/blob/client');
 const path = require('path');
 
 const app = express();
