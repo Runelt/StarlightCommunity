@@ -51,7 +51,7 @@ function isNonEmptyString(v) {
 }
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile('/index.html');
 });
 
 app.get('/api/posts', async (req, res) => {
