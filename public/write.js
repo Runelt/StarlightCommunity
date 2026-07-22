@@ -91,7 +91,7 @@ postForm.addEventListener('submit', async (e) => {
             fileHint.textContent = `업로드 중... ${file.name}`;
             const blob = await upload(file.name, file, {
                 access: 'public',
-                handleUploadUrl: '/api/blob-upload',
+                handleUploadUrl: '/blob-upload',
                 onUploadProgress: (progress) => {
                     fileHint.textContent = `업로드 중... ${Math.round(progress.percentage)}%`;
                 }
