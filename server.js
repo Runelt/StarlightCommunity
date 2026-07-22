@@ -14,36 +14,36 @@ if (!process.env.DATABASE_URL) {
 
 const sql = neon(process.env.DATABASE_URL);
 
-app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json({ limit: '2mb' }));
+app.use(express.static('public'));
 
 app.post('/api/blob-upload', async (req, res) => {
     try {
-        const jsonResponse = await handleUpload({
+        const response = await handleUpload({
             body: req.body,
-            request: new Request('https://internal-request.local', {
-                method: req.method,
-                headers: new Headers(req.headers)
-            }),
-            onBeforeGenerateToken: async (pathname) => {
-                return {
-                    allowedContentTypes: [
-                        'image/jpeg', 'image/png', 'image/gif', 'image/webp',
-                        'video/mp4', 'video/webm', 'video/quicktime'
-                    ],
-                    addRandomSuffix: true,
-                    maximumSizeInBytes: 200 * 1024 * 1024 // 200MB
-                };
-            },
-            onUploadCompleted: async ({ blob }) => {
-                console.log('Blob 업로드 완료:', blob.url);
-            }
+            request: req,
+            onBeforeGenerateToken: async (pathname) => ({
+                allowedContentTypes: [
+                    'image/jpeg',
+                    'image/png',
+                    'image/gif',
+                    'image/webp',
+                    'video/mp4',
+                    'video/webm',
+                    'video/quicktime'
+                ],
+                addRandomSuffix: true,
+                maximumSizeInBytes: 200 * 1024 * 1024
+            })
         });
-        res.json(jsonResponse);
+
+        res.json(response);
     } catch (err) {
-        console.error(err);
-        res.status(400).json({ error: err.message || '업로드 토큰 발급 실패' });
+        console.error('Blob error:', err);
+        res.status(400).json({
+            error: err.message
+        });
     }
 });
 
