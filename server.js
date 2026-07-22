@@ -23,7 +23,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.post('/api/blob-upload', async (req, res) => {
+app.post('/blob-upload', async (req, res) => {
     try {
         const jsonResponse = await handleUpload({
             body: req.body,
