@@ -18,12 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '2mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next) => {
-    console.log('REQUEST:', req.method, req.url);
-    next();
-});
-
 app.post('/blob-upload', async (req, res) => {
+    console.log(req.body);
     try {
         const jsonResponse = await handleUpload({
             body: req.body,
@@ -32,7 +28,7 @@ app.post('/blob-upload', async (req, res) => {
                 headers: new Headers(req.headers),
                 body: JSON.stringify(req.body)
             }),
-            onBeforeGenerateToken: async (pathname) => {
+            onBeforeGenerateToken: async () => {
                 return {
                     allowedContentTypes: [
                         'image/jpeg',
@@ -44,21 +40,19 @@ app.post('/blob-upload', async (req, res) => {
                         'video/quicktime'
                     ],
                     addRandomSuffix: true,
-                    maximumSizeInBytes: 200 * 1024 * 1024 //200MB
+                    maximumSizeInBytes: 200 * 1024 * 1024
                 };
             }
         });
 
         res.json(jsonResponse);
-
     } catch (err) {
-        console.error('Blob upload error:', err);
+        console.error('BLOB ERROR:', err);
         res.status(400).json({
             error: err.message
         });
     }
 });
-
 
 function isNonEmptyString(v) {
     return typeof v === 'string' && v.trim().length > 0;
