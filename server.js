@@ -50,6 +50,10 @@ function isNonEmptyString(v) {
     return typeof v === 'string' && v.trim().length > 0;
 }
 
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
+
 app.get('/api/posts', async (req, res) => {
     try {
         const rows = await sql`
