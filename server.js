@@ -29,6 +29,7 @@ app.post('/blob-upload', async (req, res) => {
                 body: JSON.stringify(req.body)
             }),
             onBeforeGenerateToken: async () => {
+                console.log('PATHNAME:', pathname);
                 return {
                     allowedContentTypes: [
                         'image/jpeg',
