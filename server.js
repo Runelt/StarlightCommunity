@@ -3,7 +3,6 @@ const crypto = require('crypto');
 const { neon } = require('@neondatabase/serverless');
 const { del } = require('@vercel/blob');
 const { handleUpload } = require('@vercel/blob');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +16,11 @@ const sql = neon(process.env.DATABASE_URL);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '2mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req, res, next) => {
+    console.log('REQUEST:', req.method, req.url);
+    next();
+});
 
 app.post('/api/blob-upload', async (req, res) => {
     try {
@@ -53,6 +57,7 @@ app.post('/api/blob-upload', async (req, res) => {
         });
     }
 });
+
 
 function isNonEmptyString(v) {
     return typeof v === 'string' && v.trim().length > 0;
@@ -242,7 +247,12 @@ app.delete('/api/posts/:id', async (req, res) => {
 
 // API 경로 404 처리
 app.use('/api', (req, res) => {
-    res.status(404).json({ error: 'Not found' });
+    console.log('API NOT FOUND:', req.method, req.url);
+    res.status(404).json({
+        error: 'API route missing',
+        method: req.method,
+        url: req.url
+    });
 });
 
 // 에러 처리
