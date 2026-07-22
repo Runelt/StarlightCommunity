@@ -20,27 +20,34 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/blob-upload', async (req, res) => {
     try {
-        const response = await handleUpload({
+        const jsonResponse = await handleUpload({
             body: req.body,
-            request: req,
-            onBeforeGenerateToken: async (pathname) => ({
-                allowedContentTypes: [
-                    'image/jpeg',
-                    'image/png',
-                    'image/gif',
-                    'image/webp',
-                    'video/mp4',
-                    'video/webm',
-                    'video/quicktime'
-                ],
-                addRandomSuffix: true,
-                maximumSizeInBytes: 200 * 1024 * 1024
-            })
+            request: new Request('https://internal-request.local', {
+                method: req.method,
+                headers: new Headers(req.headers),
+                body: JSON.stringify(req.body)
+            }),
+            onBeforeGenerateToken: async (pathname) => {
+                return {
+                    allowedContentTypes: [
+                        'image/jpeg',
+                        'image/png',
+                        'image/gif',
+                        'image/webp',
+                        'video/mp4',
+                        'video/webm',
+                        'video/quicktime'
+                    ],
+                    addRandomSuffix: true,
+                    maximumSizeInBytes: 200 * 1024 * 1024 //200MB
+                };
+            }
         });
 
-        res.json(response);
+        res.json(jsonResponse);
+
     } catch (err) {
-        console.error('Blob error:', err);
+        console.error('Blob upload error:', err);
         res.status(400).json({
             error: err.message
         });
