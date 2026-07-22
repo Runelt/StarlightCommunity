@@ -19,7 +19,6 @@ app.use(express.json({ limit: '2mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/blob-upload', async (req, res) => {
-    console.log(req.body);
     try {
         const jsonResponse = await handleUpload({
             body: req.body,
@@ -28,24 +27,21 @@ app.post('/blob-upload', async (req, res) => {
                 headers: new Headers(req.headers),
                 body: JSON.stringify(req.body)
             }),
-            onBeforeGenerateToken: async (pathname) => {
-                console.log('PATHNAME:', pathname);
-                return {
-                    allowedContentTypes: [
-                        'image/jpeg',
-                        'image/png',
-                        'image/gif',
-                        'image/webp',
-                        'video/mp4',
-                        'video/webm',
-                        'video/quicktime'
-                    ],
-                    addRandomSuffix: true,
-                    maximumSizeInBytes: 200 * 1024 * 1024
-                };
-            }
-        });
 
+            onBeforeGenerateToken: async (pathname) => ({
+                allowedContentTypes: [
+                    'image/jpeg',
+                    'image/png',
+                    'image/gif',
+                    'image/webp',
+                    'video/mp4',
+                    'video/webm',
+                    'video/quicktime'
+                ],
+                addRandomSuffix: true,
+                maximumSizeInBytes: 200 * 1024 * 1024
+            })
+        });
         res.json(jsonResponse);
     } catch (err) {
         console.error('BLOB ERROR:', err);
