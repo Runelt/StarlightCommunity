@@ -58,7 +58,7 @@ async function handleLogin(isAdmin = false) {
     setButtonsDisabled(true);
     try {
         const user = await postJson('/api/auth/login', { username, password, asAdmin: isAdmin });
-        showToast(isAdmin ? '관리자 로그인 성공' : `환영합니다, ${user.username}님`);
+        showToast(`환영합니다, ${user.username}님`);
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 1000); // toast가 사라진 후 이동
@@ -87,7 +87,7 @@ async function handleRegister() {
     setButtonsDisabled(true);
     try {
         const user = await postJson('/api/auth/register', { username, password });
-        showToast(`가입 완료! 환영합니다, ${user.username}님`);
+        showToast(`어서오세요, ${user.username}님`);
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 1000); // toast가 사라진 후 이동
