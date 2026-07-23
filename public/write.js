@@ -1,12 +1,11 @@
 import { showToast } from './alert.js';
-import { upload } from "https://esm.sh/@vercel/blob@1.0.0/client";
+import { upload } from 'https://esm.sh/@vercel/blob@1.0.0/client';
 
 const postForm = document.getElementById('writeForm');
 const cancelBtn = document.getElementById('cancelBtn');
 const fileInput = document.getElementById('fileInput');
 const fileLabel = document.querySelector('.custom-file-label');
 const fileHint = document.getElementById('fileHint');
-const authorInput = document.getElementById('write-author-input');
 const imagePreview = document.getElementById('imagePreview');
 const videoPreview = document.getElementById('videoPreview');
 
@@ -55,25 +54,30 @@ fileInput.addEventListener('change', () => {
 
 cancelBtn.addEventListener('click', () => window.location.href = 'index.html');
 
-function setAuthorField() {
-    const currentUser = localStorage.getItem('currentUser');
-    const currentAdmin = localStorage.getItem('currentAdmin');
-    const who = currentUser || currentAdmin || '';
-    if (authorInput) authorInput.value = who;
+// 로그인 여부 확인
+async function requireLoginOrRedirect() {
+    try {
+        const res = await fetch('/api/auth/me');
+        const data = await res.json();
+        if (!data.user) {
+            showToast('로그인이 필요합니다');
+            setTimeout(() => window.location.href = 'login.html', 1000);
+            return false;
+        }
+        return true;
+    } catch {
+        showToast('로그인 상태를 확인할 수 없습니다');
+        return false;
+    }
 }
-setAuthorField();
+requireLoginOrRedirect();
 
 // 제출
 postForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // 로그인 여부 확인
-    const currentUser = localStorage.getItem('currentUser');
-    const currentAdmin = localStorage.getItem('currentAdmin');
-    if (!currentUser && !currentAdmin) {
-        showToast('로그인이 필요합니다');
-        return;
-    }
+    const loggedIn = await requireLoginOrRedirect();
+    if (!loggedIn) return;
 
     const submitBtn = postForm.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
@@ -81,12 +85,12 @@ postForm.addEventListener('submit', async (e) => {
     try {
         const title = document.getElementById('title-input').value;
         const content = document.getElementById('content-input').value;
-        const author = authorInput.value;
         const file = fileInput.files[0];
 
         let mediaUrl = null;
         let mediaType = null;
 
+        // Blob 로직
         if (file) {
             fileHint.textContent = `업로드 중... ${file.name}`;
             const blob = await upload(file.name, file, {
@@ -104,7 +108,7 @@ postForm.addEventListener('submit', async (e) => {
         const res = await fetch('/api/posts', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, content, author, mediaUrl, mediaType })
+            body: JSON.stringify({ title, content, mediaUrl, mediaType })
         });
 
         if (res.ok) {
