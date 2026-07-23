@@ -66,7 +66,7 @@
             padding: 15px 0;
             cursor: pointer;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             color: var(--ink-soft);
             background: none;
             border: none;
@@ -93,6 +93,12 @@
         /* 탭 내용 */
         .tab-content {
             padding: 24px;
+        }
+
+        .field-hint {
+            font-size: 12px;
+            color: var(--ink-soft);
+            margin: -4px 0 10px 2px;
         }
 
         /* 입력 필드 */
@@ -140,16 +146,10 @@
             outline-offset: 2px;
         }
 
-        .signup {
+        .btn:disabled {
+            background-color: var(--line);
             color: var(--ink-soft);
-            text-align: center;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-
-        .signup:hover {
-            color: var(--accent);
+            cursor: default;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -162,12 +162,13 @@
 
 <body>
 
-    <a class="page-title" href="index.html">게시판</a>
+    <a class="page-title" href="index.html">별빛 커뮤니티</a>
 
     <div class="card">
         <div class="tab-container" role="tablist">
             <button type="button" class="tab-btn" data-tab="home" role="tab">홈</button>
             <button type="button" class="tab-btn active" data-tab="login" role="tab" aria-selected="true">로그인</button>
+            <button type="button" class="tab-btn" data-tab="register" role="tab" aria-selected="false">회원가입</button>
             <button type="button" class="tab-btn" data-tab="admin" role="tab" aria-selected="false">관리자</button>
         </div>
 
@@ -175,7 +176,15 @@
             <input type="text" id="username" class="input-field" placeholder="아이디" autocomplete="username" required />
             <input type="password" id="password" class="input-field" placeholder="비밀번호" autocomplete="current-password" required />
             <button type="button" class="btn" id="login-btn">로그인</button>
-            <p class="signup" id="signup">회원가입</p>
+        </div>
+
+        <div class="tab-content" id="register-tab" role="tabpanel" style="display:none;">
+            <input type="text" id="register-username" class="input-field" placeholder="아이디" autocomplete="username" required />
+            <p class="field-hint">영문/숫자/밑줄(_) 3~20자</p>
+            <input type="password" id="register-password" class="input-field" placeholder="비밀번호" autocomplete="new-password" required />
+            <input type="password" id="register-password-confirm" class="input-field" placeholder="비밀번호 확인" autocomplete="new-password" required />
+            <p class="field-hint">8자 이상</p>
+            <button type="button" class="btn" id="register-btn">회원가입</button>
         </div>
 
         <div class="tab-content" id="admin-tab" role="tabpanel" style="display:none;">
